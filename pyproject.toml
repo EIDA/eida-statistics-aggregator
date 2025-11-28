@@ -1,6 +1,6 @@
 [project]
 name = "eida-statistics-aggregator"
-version = "0.6.1"
+version = "0.6.2"
 description = "Aggregates and anonymize data distribution logs from seiscomp, ready to be sent to the central EIDA KPI service."
 readme = "README.md"
 requires-python = ">=3.13"

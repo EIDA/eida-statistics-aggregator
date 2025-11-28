@@ -8,7 +8,9 @@ recommended to check that e.g. assets are included."""
 import re
 from eida_statistics_aggregator.aggregator import proj_version
 
-if re.match(r"[0-9]+\.[0-9]+\.[0-9]+", proj_version()):
-    print("Smoke test succeeded")
-else:
-    raise RuntimeError("plop")
+
+def test_smoke():
+    if re.match(r"[0-9]+\.[0-9]+\.[0-9]+", proj_version()):
+        print("Smoke test succeeded")
+    else:
+        raise RuntimeError("plop")

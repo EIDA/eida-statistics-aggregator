@@ -1,1 +1,39 @@
-*.pyc
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Env variables
+.env
+.env.docker
+
+# Tooling caches and reports
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+commit.txt
+htmlcov/
+codequality.json
+coverage.xml
+junit.xml
+
+# StaticFiles
+staticfiles/
+
+# Translations
+*.mo
+*.pot
+
+# npm stuff
+node_modules/
+.parcel-cache/
+
+# IDE
+.idea

@@ -19,11 +19,9 @@ From [Pypi](https://pypi.org/project/eida-statistics-aggregator/) using [UV](htt
     eida_stats_aggregator --help
     
 
-Alternatively, if you want to install with `pipenv` , run 
+Alternatively, if you want to install with `pip` , run 
 
-    pipenv install
-    pipenv shell
-    pip install -e .
+    pip install eida-statistics-aggregator 
     eida_stats_aggregator --help
     
 For now, the log file from seiscomp is expected to be a list of JSON entries compressed with BZIP2.

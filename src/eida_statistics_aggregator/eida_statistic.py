@@ -1,7 +1,10 @@
 import logging
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
+
 from python_hll.hll import HLL
 from python_hll.util import NumberUtil
+
+
 class EidaStatistic:
     """
     One statistic object.
@@ -14,7 +17,15 @@ class EidaStatistic:
     * unique_clients : a set (hll object) of clients.
     """
 
-    def __init__(self, date=datetime.now(), network="", station="", location="--", channel="", country=""):
+    def __init__(
+        self,
+        date=datetime.UTC,
+        network="",
+        station="",
+        location="--",
+        channel="",
+        country="",
+    ):
         """
         Class initialisation
         """
@@ -32,16 +43,18 @@ class EidaStatistic:
 
     def _shift_to_begin_of_month(self):
         """
-        Set the date as the first day of month. The statistics are meant to be displayed by month.
-        :param event_datetime is a DateTime or Date object. Must have a weekday() method.
+        Set the date as the first day of month. The statistics are meant to be displayed
+        by month.
+        :param event_datetime is a DateTime or Date object. Must have a weekday() method
         """
         if not isinstance(self.original_day, date):
             raise TypeError("datetime.date expected")
-        return self.original_day - timedelta(days=(self.original_day.day-1))
+        return self.original_day - timedelta(days=(self.original_day.day - 1))
 
     def key(self):
         """
-        Generate a unique key for this object in order to identify it easily and compare 2 objects.
+        Generate a unique key for this object in order to identify it easily and compare
+        2 objects.
         2 statistics can be merged if they have the same key.
         """
         return f"{self._shift_to_begin_of_month()}_{self.network}_{self.station}_{self.location}_{self.channel}_{self.country}"
@@ -49,7 +62,8 @@ class EidaStatistic:
     def aggregate(self, eidastat):
         """
         Aggregate a statistic to this object.
-        This function alters the called object by aggregating another statistic object into it:
+        This function alters the called object by aggregating another statistic object
+        into it:
         - incrementing counts,
         - summing sizes
         - aggregating HLL objects
@@ -62,7 +76,11 @@ class EidaStatistic:
             self.nb_unsuccessful_requests += eidastat.nb_unsuccessful_requests
             self.unique_clients.union(eidastat.unique_clients)
         else:
-            logging.warning("Key %s to aggregate differs from called object's key %s", eidastat.key(), self.key())
+            logging.warning(
+                "Key %s to aggregate differs from called object's key %s",
+                eidastat.key(),
+                self.key(),
+            )
 
     def info(self):
         """
@@ -75,15 +93,17 @@ class EidaStatistic:
         Dump the statistic as a dictionary
         """
         unique_clients_bytes = self.unique_clients.to_bytes()
-        json_dict = {'month': str(self._shift_to_begin_of_month()),
-                     'network': self.network,
-                     'station': self.station,
-                     'location': self.location,
-                     'channel': self.channel,
-                     'country': self.country,
-                     'bytes': self.size,
-                     'nb_requests': self.nb_requests,
-                     'nb_successful_requests': self.nb_successful_requests,
-                     'nb_unsuccessful_requests': self.nb_unsuccessful_requests,
-                     'clients': "\\x" + NumberUtil.to_hex(unique_clients_bytes, 0, len(unique_clients_bytes))}
-        return json_dict
+        return {
+            "month": str(self._shift_to_begin_of_month()),
+            "network": self.network,
+            "station": self.station,
+            "location": self.location,
+            "channel": self.channel,
+            "country": self.country,
+            "bytes": self.size,
+            "nb_requests": self.nb_requests,
+            "nb_successful_requests": self.nb_successful_requests,
+            "nb_unsuccessful_requests": self.nb_unsuccessful_requests,
+            "clients": "\\x"
+            + NumberUtil.to_hex(unique_clients_bytes, 0, len(unique_clients_bytes)),
+        }

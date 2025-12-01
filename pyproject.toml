@@ -33,6 +33,7 @@ dev = [
 [tool.pytest]
 minversion = "9.0"
 python_files = ["*_tests.py", "test_*.py", "tests/*.py"]
+# log_cli = true
 
 [tool.ruff]
 lint.select = ["ALL"]

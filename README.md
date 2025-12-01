@@ -16,7 +16,7 @@ This aggregation result is sent to a central database through a webservice provi
 
 This program is intended for python3.6 and more.
 
-From [Pypi](https://pypi.org/project/eida-statistics-aggregator/) using [UV](https://docs.astral.sh/uv/getting-started/installation/) (recommended):
+From [Pypi](https://pypi.org/project/eida-statistics-aggregator/), using [UV](https://docs.astral.sh/uv/getting-started/installation/) (recommended):
     uv tool install eida-statistics-aggregator
     eida_stats_aggregator --help
     

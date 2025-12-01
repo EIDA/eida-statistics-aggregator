@@ -38,7 +38,7 @@ jobs:
       - name: Generate SVG Coverage Badge
         uses: tj-actions/coverage-badge-py@v2
         with:
-          output: badges/${{ steps.extract_branch.outputs.branch }}/badge.svg
+          output: /tmp/coverage-${{ steps.extract_branch.outputs.branch }}.svg
 
       - name: Commit badge
         env:
@@ -47,6 +47,8 @@ jobs:
           pushd badges
               git config --local user.email "action@github.com"
               git config --local user.name "GitHub Action"
+              git checkout -- 
+              cp "/tmp/coverage-${BRANCH}.svg" "${BRANCH}/badge.svg"
               git add "${BRANCH}/badge.svg"
               git commit -m "Add/Update badge"
           popd

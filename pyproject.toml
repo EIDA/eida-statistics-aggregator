@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "click>=8.3.1",
-    "fdsnnetextender==3.3.0",
+    "fdsnnetextender>=5.0.0",
     "mmh3>=5.2.0",
     "python-hll2>=1.0.0",
     "python-magic>=0.4.27",
@@ -25,6 +25,8 @@ build-backend = "flit_core.buildapi"
 [dependency-groups]
 dev = [
     "pytest>=9.0.1",
+    "pytest-cov>=7.0.0",
+    "tox>=4.32.0",
 ]
 
 [tool.pytest]

@@ -5,7 +5,7 @@ Aggregate and submit metadata
 import gzip
 import logging
 import sys
-from os import Path
+from pathlib import Path
 from importlib.metadata import version
 
 import click
@@ -47,7 +47,7 @@ def cli(files, output_directory, token, send_to, version):
         sys.exit(0)
     statistics = StatCollection()
     for f in files:
-        statistics.parse_file(f)
+        statistics.parse(f)
 
     logger.info(
         "Generated %s aggregations from %s events. Aggregation score is %s",

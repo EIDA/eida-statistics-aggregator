@@ -1,15 +1,15 @@
 import bz2
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, UTC
 from importlib.metadata import version
 from os import sys
+from pathlib import Path
 
 import magic
 import mmh3
-import Path
 from click import progressbar
-from fdsnnetextender import FdsnNetExtender
+from fdsnnetextender.fdsnnetextender import FdsnNetExtender
 
 from eida_statistics_aggregator.eida_statistic import EidaStatistic
 
@@ -31,7 +31,7 @@ class StatCollection:
         EidaStatistic.key()
         """
         self._stats_dates = []
-        self._generated_at = datetime.now(tz=datetime.UTC)
+        self._generated_at = datetime.now(tz=UTC)
         self._statistics = {}
         self.nbevents = 0
         self.net_extender = FdsnNetExtender()
@@ -40,7 +40,7 @@ class StatCollection:
         """
         Append an EidaStatistic object into the collection.
         During this process, if there is already a statistic with the same key, they
-        will be merged.
+        will be merged
         :param stat is an EidaStatistic instance
         """
         if stat.key() in self._statistics:
@@ -75,9 +75,20 @@ class StatCollection:
             default=lambda o: o.to_dict(),
         )
 
-    def parse_file(self, filename):
+    def _open_log_file(self, filename):
+        # Test if it's a bz2 compressed file
+        if magic.from_file(filename).startswith("bzip2 compressed data"):
+            logfile = bz2.BZ2File(filename)
+        else:
+            logfile = Path.open(filename)
+        return logfile
+
+    def parse(self, filename):
+        logfile = self._open_log_file(filename)
+        self.parse_logs(logfile.readlines())
+
+    def parse_logs(self, logs):
         """
-        Parse the file provided in order to aggregate the data.
         Exemple of a line:
         {
         "clientID": "IRISDMC DataCenterMeasure/2019.136 Perl/5.018004 libwww-perl/6.13",
@@ -150,15 +161,10 @@ class StatCollection:
             "userID": 589198147
         }
         """
-        # Test if it's a bz2 compressed file
-        if magic.from_file(filename).startswith("bzip2 compressed data"):
-            logfile = bz2.BZ2File(filename)
-        else:
-            logfile = Path.open(filename)
         # Initializing the counters
         line_number = 0
         # What about a nice progressbar ?
-        with progressbar(logfile.readlines(), label=f"Parsing {filename}") as bar:
+        with progressbar(logs, label="Parsing logs") as bar:
             for jsondata in bar:
                 line_number += 1
                 try:
@@ -199,8 +205,13 @@ class StatCollection:
                                 trace["net"], trace["start"][0:10]
                             )
                         except ValueError:
-                            logger.exception()
-                            sys.exit(1)
+                            logger.warning(
+                                "Network %s could not be extended at %s. Ignoring this line",
+                                trace["net"],
+                                trace["start"],
+                            )
+                            # We should ignore this line
+                            continue
                         # Make an EidaStatistic object using this NSLC + date + country
                         new_stat = EidaStatistic(
                             date=event_date,

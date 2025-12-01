@@ -15,9 +15,13 @@ jobs:
 
       - name: Install UV
         uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          save-cache: true
 
       - name: Run Pytest with Coverage
         run: |
+          uv sync --locked --dev
           uv run pytest --cov=src --cov-report=term --cov-report=xml
 
       - name: Extract branch name
@@ -28,7 +32,8 @@ jobs:
       - name: Generate badge
         env:
           BRANCH: ${{ steps.extract_branch.outputs.branch }}
-        run: uv run genbadge coverage -i coverage.xml -o /tmp/${BRANCH}-coverage.svg
+        run: |
+          uv run genbadge coverage -i coverage.xml -o /tmp/${BRANCH}-coverage.svg
 
       - uses: actions/checkout@v1
         with:

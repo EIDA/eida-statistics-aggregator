@@ -25,20 +25,15 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
 
+      - name: Generate badge
+        env:
+          BRANCH: ${{ steps.extract_branch.outputs.branch }}
+        run: uv run genbadge coverage -i coverage.xml -o /tmp/${BRANCH}-coverage.svg
+
       - uses: actions/checkout@v1
         with:
           ref: badges
           path: badges
-
-      - name: Create badges dir if necessary
-        env:
-          BRANCH: ${{ steps.extract_branch.outputs.branch }}
-        run: mkdir -p badges/${BRANCH}
-
-      - name: Generate SVG Coverage Badge
-        uses: tj-actions/coverage-badge-py@v2
-        with:
-          output: /tmp/coverage-${{ steps.extract_branch.outputs.branch }}.svg
 
       - name: Commit badge
         env:
@@ -48,7 +43,8 @@ jobs:
               git config --local user.email "action@github.com"
               git config --local user.name "GitHub Action"
               git checkout -- 
-              cp "/tmp/coverage-${BRANCH}.svg" "${BRANCH}/badge.svg"
+              mkdir "${BRANCH}"
+              cp "/tmp/${BRANCH}-coverage.svg" "${BRANCH}/coverage.svg"
               git add "${BRANCH}/badge.svg"
               git commit -m "Add/Update badge"
           popd

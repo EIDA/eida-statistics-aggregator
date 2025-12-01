@@ -26,14 +26,14 @@ jobs:
 
       - name: Extract branch name
         shell: bash
-        run: echo "{branch}=$(git branch --show-current)" >> $GITHUB_OUTPUT
-        id: extract_branch
+        run: |
+          echo "BRANCH=$(git branch --show-current)" >> $GITHUB_ENV
+          echo "BADGE_SOURCE=/tmp/$(git branch --show-current)-coverage.svg" >> $GITHUB_ENV
+          echo "BADGE_DEST=badges/$(git branch --show-current)/coverage.svg" >> $GITHUB_ENV
 
       - name: Generate badge
-        env:
-          BRANCH: ${{ steps.extract_branch.outputs.branch }}
         run: |
-          uv run genbadge coverage -i coverage.xml -o /tmp/${BRANCH}-coverage.svg
+          uv run genbadge coverage -i coverage.xml -o $BADGE_SOURCE
 
       - uses: actions/checkout@v1
         with:
@@ -41,18 +41,13 @@ jobs:
           path: badges
 
       - name: Commit badge
-        env:
-          BRANCH: ${{ steps.extract_branch.outputs.branch }}
-          BADGE_SOURCE: /tmp/${{ steps.extract_branch.outputs.branch }}-coverage.svg
-          BADGE_DEST: badges/${{ steps.extract_branch.outputs.branch }}/coverage.svg
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git checkout -- 
           mkdir -p "badges/${BRANCH}"
           cp "$BADGE_SOURCE" "$BADGE_DEST"
-          git add "$BADGE_DEST"
-          git commit -m "Add/Update badge"
+          git add "$BADGE_DEST" && git commit -m "Add/Update badge" || true
 
       - name: Push badge commit
         uses: ad-m/github-push-action@master

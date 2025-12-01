@@ -1,5 +1,5 @@
 import logging
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 
 from python_hll.hll import HLL
 from python_hll.util import NumberUtil
@@ -19,7 +19,7 @@ class EidaStatistic:
 
     def __init__(
         self,
-        date=datetime.UTC,
+        date,
         network="",
         station="",
         location="--",

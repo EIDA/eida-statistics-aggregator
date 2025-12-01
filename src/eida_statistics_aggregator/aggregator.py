@@ -5,7 +5,7 @@ Aggregate and submit metadata
 import gzip
 import logging
 import sys
-from os import Path
+from pathlib import Path
 from importlib.metadata import version
 
 import click
@@ -13,7 +13,7 @@ import requests
 
 from eida_statistics_aggregator.stat_collection import StatCollection
 
-logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+logging.basicConfig(level=logging.DEBUG, format="%(levelname)s %(message)s")
 logger = logging.getLogger()
 
 
@@ -47,7 +47,7 @@ def cli(files, output_directory, token, send_to, version):
         sys.exit(0)
     statistics = StatCollection()
     for f in files:
-        statistics.parse_file(f)
+        statistics.parse(f)
 
     logger.info(
         "Generated %s aggregations from %s events. Aggregation score is %s",

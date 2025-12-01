@@ -49,7 +49,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git checkout -- 
-          mkdir "badges/${BRANCH}"
+          mkdir -p "badges/${BRANCH}"
           cp "$BADGE_SOURCE" "$BADGE_DEST"
           git add "$BADGE_DEST"
           git commit -m "Add/Update badge"

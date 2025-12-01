@@ -1,5 +1,7 @@
 # EIDA Statistics aggregation
 
+[![Coverage Status](https://raw.githubusercontent.com/EIDA/eida-statistics-aggregator/refs/heads/badges/badges/main/coverage.svg)]
+
 This project provides unified statistics about EIDA nodes usage.
 
 This program is part of the EIDA statistics system. The aggregator groups a set of dataselect usage information in order to build a logging statistic ready to be shipped to the central system.

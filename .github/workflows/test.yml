@@ -27,7 +27,7 @@ jobs:
       - name: Extract branch name
         shell: bash
         run: |
-          BRANCH=${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          BRANCH=${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}
           echo "BRANCH=$BRANCH" >> $GITHUB_ENV
           echo "BADGE_SOURCE=/tmp/$BRANCH-coverage.svg" >> $GITHUB_ENV
           echo "BADGE_DEST=badges/$BRANCH/coverage.svg" >> $GITHUB_ENV

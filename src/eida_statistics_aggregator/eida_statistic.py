@@ -1,8 +1,9 @@
 import logging
 from datetime import date, timedelta
 
-from python_hll.hll import HLL
-from python_hll.util import NumberUtil
+from python_hll2.hll import HLL
+from python_hll2.util import NumberUtil
+
 
 
 class EidaStatistic:

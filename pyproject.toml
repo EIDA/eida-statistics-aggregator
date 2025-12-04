@@ -1,14 +1,14 @@
 [project]
 name = "eida-statistics-aggregator"
-version = "0.6.2"
+version = "0.8.0"
 description = "Aggregates and anonymize data distribution logs from seiscomp, ready to be sent to the central EIDA KPI service."
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
     "click>=8.3.1",
-    "fdsnnetextender>=5.0.0",
+    "fdsnnetextender>=5.0.2",
     "mmh3>=5.2.0",
-    "python-hll2>=1.0.0",
+    "python-hll2>=2.0.1",
     "python-magic>=0.4.27",
     "requests>=2.32.5",
 ]

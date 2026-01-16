@@ -1,6 +1,6 @@
 # EIDA Statistics aggregation
 
-[![Coverage Status](https://raw.githubusercontent.com/EIDA/eida-statistics-aggregator/refs/heads/badges/badges/main/coverage.svg)]
+![Coverage Status](https://raw.githubusercontent.com/EIDA/eida-statistics-aggregator/refs/heads/badges/badges/main/coverage.svg)
 
 This project provides unified statistics about EIDA nodes usage.
 
@@ -17,6 +17,7 @@ This aggregation result is sent to a central database through a webservice provi
 This program is intended for python3.6 and more.
 
 From [Pypi](https://pypi.org/project/eida-statistics-aggregator/), using [UV](https://docs.astral.sh/uv/getting-started/installation/) (recommended):
+
     uv tool install eida-statistics-aggregator
     eida_stats_aggregator --help
     
